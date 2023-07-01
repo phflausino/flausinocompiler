@@ -17,6 +17,9 @@ struct compiler_process* compiler_process_create(char* in_file, char* out_file, 
   struct compiler_process* process = calloc(1, sizeof(struct compiler_process));
   process->flags = flags;
   process->cfile.fp = input;
+  process->pos.line = 1;
+  process->pos.col = 1;
+  process->pos.filename = in_file;
   process->out_file = output;
   return process;
 }

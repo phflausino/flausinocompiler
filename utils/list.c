@@ -19,7 +19,7 @@ struct node* _create_node (const list_ptr list, void* value) {
   return new_node;
 };
 
-struct node* add_node(const list_ptr list, void* value) {
+struct node* list_add_node(const list_ptr list, void* value) {
   struct node* new_node = _create_node(list, value);
   if(!list->head) {
     list->head = new_node;
@@ -28,6 +28,7 @@ struct node* add_node(const list_ptr list, void* value) {
     list->head->next = list->tail;
   } else {
     list->tail->next = new_node;
+    list->tail = new_node;
   } 
   return new_node;
 }

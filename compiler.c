@@ -5,5 +5,12 @@ int compile_file(char* input, char* output, int flags) {
   if(!cp)
     return COMPILER_FAILED;
 
+  struct lex_process* lp = lex_process_create(cp);
+  if(!lp)
+    return COMPILER_FAILED;
+
+  if(lex(lp) != LEXICAL_ANALYSIS_SUCCESS)
+    return COMPILER_FAILED;
+
   return COMPILER_OK;
 }
