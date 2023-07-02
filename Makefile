@@ -1,4 +1,4 @@
-OBJECTS= ./build/compiler.o ./build/compiler_process.o ./build/utils/list.o ./build/lexer.o ./build/lex_process.o
+OBJECTS= ./build/compiler.o ./build/compiler_process.o ./build/utils/list.o ./build/utils/str_dynamic.o ./build/lexer.o ./build/lex_process.o
 INCLUDES= -I./
 
 all: ${OBJECTS}
@@ -18,6 +18,9 @@ all: ${OBJECTS}
 
 ./build/utils/list.o: ./utils/list.c
 	gcc ./utils/list.c ${INCLUDES} -g -o ./build/utils/list.o -c
+
+./build/utils/str_dynamic.o: ./utils/str_dynamic.c
+	gcc ./utils/str_dynamic.c ${INCLUDES} -g -o ./build/utils/str_dynamic.o -c
 
 clean:
 	rm ./flausinocc
