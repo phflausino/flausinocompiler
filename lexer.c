@@ -21,6 +21,8 @@
     c = nextc(lp);                                      \
   }
 
+struct token* create_token(struct lex_process* lp);
+
 struct token* create_number_token(struct lex_process* lp) {
   struct token* tk = malloc(sizeof(struct token));
   struct str_dynamic* sd = create_str_dynamic();
@@ -33,7 +35,21 @@ struct token* create_number_token(struct lex_process* lp) {
   return tk;
 }
 
-struct token* create_token(struct lex_process* lp);
+struct token* create_string_token(struct lex_process* lp) {
+  nextc(lp); // skip double quote
+  struct token* tk = malloc(sizeof(struct token));
+  struct str_dynamic* sd = create_str_dynamic();
+  
+  /*
+   * TODO: handle escapes like \n
+   */
+  GET_C_IF(sd, (c != '"'));
+  nextc(lp); // skip double quote terminator
+
+  tk->type = TOKEN_TYPE_STRING;
+  tk->sval = sd->s;
+  return tk; 
+}
 
 struct token* handle_white_space(struct lex_process* lp) {
   nextc(lp);
@@ -53,6 +69,10 @@ struct token* create_token(struct lex_process* lp) {
       tk = handle_white_space(lp);
       break;
 
+    case '"':
+      tk = create_string_token(lp);
+      break;
+
     case EOF: break;
 
     default:
@@ -63,7 +83,10 @@ struct token* create_token(struct lex_process* lp) {
 
 void print_tokens(void* value) {
   struct token* tk = (struct token*)value;
-  printf("Token type: %d, value: %lld\n", tk->type, tk->llnum);
+  if(tk->type == TOKEN_TYPE_STRING) 
+    printf("Token type: %d, value: %s\n", tk->type, tk->sval);
+  else
+    printf("Token type: %d, value: %lld\n", tk->type, tk->llnum);
 }
 
 int lex(struct lex_process* lp) {

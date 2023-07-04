@@ -6,12 +6,14 @@
 
 /* Token Related */
 enum {
-  TOKEN_TYPE_NUMBER
+  TOKEN_TYPE_NUMBER,
+  TOKEN_TYPE_STRING
 };
 struct token {
   int type;
 
   union {
+    char* sval;
     unsigned int inum;
     unsigned long lnum;
     unsigned long long llnum;
