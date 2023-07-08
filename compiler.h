@@ -2,12 +2,18 @@
 #define FLAUSINOCOMPILER_H
 
 #include <stdio.h>
+#include <string.h>
 #include "utils/list.h"
+
+/* Macros */
+#define S_EQ(s1, s2) \
+  (s1 && s2 && (strcmp(s1, s2) == 0))
 
 /* Token Related */
 enum {
   TOKEN_TYPE_NUMBER,
-  TOKEN_TYPE_STRING
+  TOKEN_TYPE_STRING,
+  TOKEN_TYPE_OPERATOR
 };
 struct token {
   int type;
