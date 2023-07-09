@@ -36,6 +36,16 @@
   case '.':           \
   case '?'
 
+#define SYMBOL_CASE  \
+  case '{':          \
+  case '}':          \
+  case ')':          \
+  case ']':          \
+  case ':':          \
+  case ';':          \
+  case '#':          \
+  case '\\'         
+
 
 #define GET_C_IF(sd, condition)                         \
   for(char c = peekc(lp); condition; c = peekc(lp)) {   \
@@ -183,6 +193,14 @@ struct token* handle_white_space(struct lex_process* lp) {
   return create_token(lp);
 }
 
+struct token* create_symbol_token(struct lex_process* lp) {
+  struct token* tk = malloc(sizeof(struct token));
+  char c = nextc(lp);
+  tk->type = TOKEN_TYPE_SYMBOL;
+  tk->cval = c;
+  return tk;
+}
+
 struct token* create_token(struct lex_process* lp) {
   struct token* tk = NULL;
   char c = peekc(lp);
@@ -193,6 +211,10 @@ struct token* create_token(struct lex_process* lp) {
 
     OPERATOR_CASE:
       tk = create_op_token(lp);
+      break;
+
+    SYMBOL_CASE:
+      tk = create_symbol_token(lp);
       break;
 
     case ' ':
@@ -214,10 +236,10 @@ struct token* create_token(struct lex_process* lp) {
 
 void print_tokens(void* value) {
   struct token* tk = (struct token*)value;
-  if(tk->type == TOKEN_TYPE_STRING) 
+  if(tk->type == TOKEN_TYPE_STRING || tk->type == TOKEN_TYPE_OPERATOR) 
     printf("Token type: %d, value: %s\n", tk->type, tk->sval);
-  else if(tk->type == TOKEN_TYPE_OPERATOR) 
-    printf("Token type: %d, value: %s\n", tk->type, tk->sval);
+  else if(tk->type == TOKEN_TYPE_SYMBOL) 
+    printf("Token type: %d, value: %c\n", tk->type, tk->cval);
   else
     printf("Token type: %d, value: %lld\n", tk->type, tk->llnum);
 }

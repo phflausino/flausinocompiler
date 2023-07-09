@@ -13,12 +13,14 @@
 enum {
   TOKEN_TYPE_NUMBER,
   TOKEN_TYPE_STRING,
-  TOKEN_TYPE_OPERATOR
+  TOKEN_TYPE_OPERATOR,
+  TOKEN_TYPE_SYMBOL
 };
 struct token {
   int type;
 
   union {
+    char cval;
     char* sval;
     unsigned int inum;
     unsigned long lnum;
